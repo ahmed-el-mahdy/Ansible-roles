@@ -1,0 +1,6 @@
+---
+# handlers file for redis
+- name: restart redis
+  ansible.builtin.service:
+    name: "{{ 'redis' if ansible_os_family == 'RedHat' else 'redis-server' }}"
+    state: restarted

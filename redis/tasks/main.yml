@@ -1,0 +1,37 @@
+---
+# tasks file for redis
+- name: Install Redis on RedHat-based systems
+  ansible.builtin.package:
+    name: redis
+    state: present
+  when: ansible_os_family == 'RedHat'
+
+- name: Start and enable Redis service on RedHat
+  ansible.builtin.service:
+    name: redis
+    state: started
+    enabled: true
+  when: ansible_os_family == 'RedHat'
+
+- name: Install Redis on Debian-based systems
+  ansible.builtin.package:
+    name: redis-server
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Start and enable Redis service on Debian
+  ansible.builtin.service:
+    name: redis-server
+    state: started
+    enabled: true
+  when: ansible_os_family == 'Debian'
+  
+- name: Configure Redis with a password
+  ansible.builtin.copy:
+    content: |
+      requirepass {{ redis_password }}
+    dest: "{{ '/etc/redis/redis.conf' if ansible_os_family == 'Debian' else '/etc/redis.conf' }}"
+    owner: redis
+    group: redis
+    mode: '0640'
+  notify: restart redis
