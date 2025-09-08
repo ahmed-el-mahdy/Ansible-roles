@@ -1,0 +1,45 @@
+Ansible Automation Project
+This repository contains a collection of Ansible playbooks and roles designed for automated infrastructure and application deployment. The project is structured to be modular, durable, and easily maintainable, with each role handling a specific component or service.
+
+Directory Structure
+The project follows the standard Ansible directory structure:
+
+playbook.yml: The main playbook, which orchestrates the execution of various roles.
+
+inventory.yml: Defines the servers, groups, and connections for your project.
+
+roles/: This is the core directory where all reusable roles are stored. Each subdirectory within roles/ is a self-contained role (e.g., redis, webserver, database).
+
+tasks/main.yml: Contains the tasks for installing and configuring the service for a specific role.
+
+handlers/main.yml: Contains handlers to restart services when needed.
+
+vars/vault.yml: An encrypted file that stores sensitive data for a role.
+
+templates/: Stores templated files (.j2) for configuration.
+
+Usage
+1. Configure the Inventory
+The inventory.yml file is where you define your target servers. You can group servers based on their purpose.
+
+[your_group_name]
+server1.example.com
+server2.example.com
+
+2. Manage Secrets
+Sensitive variables, such as passwords or API keys, are stored securely using Ansible Vault. It is crucial to manage these secrets within the vars/vault.yml file of each role.
+
+To create a new, encrypted vault file for a role:
+
+ansible-vault create roles/your_role_name/vars/vault.yml
+
+To edit an existing vault file, you will be prompted for your vault password:
+
+ansible-vault edit roles/your_role_name/vars/vault.yml
+
+3. Run the Playbook
+To execute the entire playbook, use the ansible-playbook command from the project's root directory. The --ask-vault-pass flag is necessary if your playbook references any encrypted vault files.
+
+ansible-playbook -i inventory.yml playbook.yml --ask-vault-pass
+
+This command will run all the roles defined in your playbook.yml in the order they are listed.
