@@ -1,4 +1,27 @@
-🤖 Ansible Automation Project
+# Ansible Automation Project
+
+## Source-Verified Scope - 30 October 2026
+
+This personal repository currently implements a Redis role, not a complete multi-role production deployment. The root `playbook.yml` is empty; it is not a working entry point. The role installs the OS-specific package, enables its service and writes a password configuration.
+
+```mermaid
+flowchart LR
+	Operator["Approved operator and inventory"] --> Play["Caller playbook - must be supplied"]
+	Private["Private redis_password input"] --> Role["Redis role"]
+	Play --> Role
+	Role --> Debian["Debian package and redis-server service"]
+	Role --> RedHat["RedHat package and redis service"]
+	Role --> Config["Redis configuration and restart handler"]
+```
+
+Review `redis/tasks/main.yml`, `redis/handlers/main.yml`, defaults and the actual target OS before use. Local variable files are not encrypted merely because their name contains `vault`; this repository's current `redis/vars/vault.yml` is not a populated encrypted vault. Never commit the password or print it in a check diff.
+
+Safe next steps: write a non-production caller playbook, supply `redis_password` through an approved protected input, run syntax checking, then review check/diff behavior without exposing the secret. The copy task replaces the Redis configuration file and can discard existing settings; merge/template behavior and handler/service-name compatibility require review before use. No remote hosts were configured during this documentation review.
+
+Experience reference: [personal project index](https://github.com/ahmed-el-mahdy/Career-Advance#personal-repository-reference-map). This demonstrates Linux configuration and role structure, not production Redis operation or database migration.
+
+## Original Project Notes
+
 Welcome to the Ansible Automation Project! This repository is a toolkit of Ansible playbooks and roles designed for efficient and reliable infrastructure and application deployment. The structure is built to be modular, durable, and easy to maintain.
 
 📁 Directory Structure

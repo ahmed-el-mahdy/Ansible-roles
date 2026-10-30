@@ -1,17 +1,17 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Redis package/service/configuration role. Source review: 30 October 2026. Installs `redis-server` on Debian or `redis` on RedHat, enables the corresponding service and writes `requirepass` from `redis_password`. Read the root README for the current entry-point and security boundaries.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+An authorized inventory, compatible Linux host, appropriate privilege escalation and a caller playbook are required. The root playbook is currently empty. Test handler and configuration-path compatibility on a disposable target before use.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+`redis_password` is required as a private input. Do not put its value in Git, command history, logs or a public check diff. The repository's file named `vars/vault.yml` is not proof of encryption or populated credentials. Review the copy task: it replaces the configuration rather than preserving all pre-existing options.
 
 Dependencies
 ------------
